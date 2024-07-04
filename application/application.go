@@ -90,6 +90,7 @@ func (self *TianAiCaptchaApplication) wrapImageCaptchaVO(captchaInfo *model.Imag
 		}
 	}
 	return &model.ImageCaptchaVO{
+		Id:                    id,
 		CaptchaName:           captchaInfo.CaptchaName,
 		BackgroundImage:       captchaInfo.BackgroundImage,
 		BackgroundImageTag:    captchaInfo.BackgroundImageTag,

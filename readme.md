@@ -17,7 +17,9 @@
     - 后面会陆续支持市面上更多好玩的验证码玩法... 敬请期待
 # 快速开始
 ## 1. go mod 导入
-    `go get -u github.com/tianaiyouqing/tianai-captcha-go@v1.0`
+```shell
+go get github.com/tianaiyouqing/tianai-captcha-go@v1.0
+```
 
 ## 2.初始化验证码
 ```go

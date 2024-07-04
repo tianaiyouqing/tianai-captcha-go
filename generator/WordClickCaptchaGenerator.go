@@ -48,6 +48,7 @@ func (self *WordClickCaptchaGenerator) GenerateCaptchaImage(captchaExchange *mod
 		fontImage := common.NewTransparentImage(fontImageWidth, fontImageWidth)
 		leftTop := (fontImageWidth - int(fontSize)) / 2
 		fontImage = fontImage.DrawString(self.Fonts[common.GetRandomInt(0, len(self.Fonts))], randomColor, hanZi, leftTop, leftTop, fontSize)
+		fontImage = fontImage.DrawString(self.Fonts[common.GetRandomInt(0, len(self.Fonts))], randomColor, hanZi, leftTop+3, leftTop, fontSize)
 		// 随机角度
 		fontImage = fontImage.Rotate(float64(common.GetRandomInt(0, 360)))
 		randomH := common.GetRandomInt(10, bgImage.Bounds().Dy()-fontImageWidth)
@@ -75,14 +76,15 @@ func (self *WordClickCaptchaGenerator) GenerateCaptchaImage(captchaExchange *mod
 	for _, c := range clickImageArr {
 		tipMsg += c.Value
 	}
-	tipImage := common.NewTransparentImage(int(fontSize)*utf8.RuneCountInString(tipMsg), int(fontSize))
-	tipImage = tipImage.DrawString(self.Fonts[common.GetRandomInt(0, len(self.Fonts))], color.RGBA{
+	gray := color.RGBA{
 		R: uint8(128),
 		G: uint8(128),
 		B: uint8(128),
 		A: 255,
-	}, tipMsg, 0, 0, fontSize)
-
+	}
+	tipImage := common.NewTransparentImage(int(fontSize)*utf8.RuneCountInString(tipMsg), int(fontSize))
+	tipImage = tipImage.DrawString(self.Fonts[common.GetRandomInt(0, len(self.Fonts))], gray, tipMsg, 0, 0, fontSize)
+	tipImage = tipImage.DrawString(self.Fonts[common.GetRandomInt(0, len(self.Fonts))], gray, tipMsg, 2, 0, fontSize)
 	captchaExchange.BgImage = bgImage
 	captchaExchange.ResourceImage = bgImageResource
 	captchaExchange.TransferData = clickImageArr

@@ -64,16 +64,16 @@ func (SimpleImageCaptchaValidator) DoGenerateImageCaptchaValidData(imageCaptchaI
 		clickImages := imageCaptchaInfo.Data.Expand.([]*model.ClickImageCheckDefinition)
 		var sb string
 		for i, img := range clickImages {
-			vx := img.X / imageCaptchaInfo.BackgroundImageWidth
-			vy := img.Y / imageCaptchaInfo.BackgroundImageHeight
-			sb += strconv.Itoa(vx) + "," + strconv.Itoa(vy) + ";"
+			vx := float32(img.X) / float32(imageCaptchaInfo.BackgroundImageWidth)
+			vy := float32(img.Y) / float32(imageCaptchaInfo.BackgroundImageHeight)
+			sb += strconv.FormatFloat(float64(vx), 'f', 6, 64) + "," + strconv.FormatFloat(float64(vy), 'f', 6, 64) + ";"
 			if i == 0 && result.ConstantKey(tolerant_key) {
-				minLeft := (img.X - img.Width/2) / imageCaptchaInfo.BackgroundImageWidth
+				minLeft := float32((img.X - img.Width/2)) / float32(imageCaptchaInfo.BackgroundImageWidth)
 				tolerant := vx - minLeft
 				result[tolerant_key] = tolerant
 			}
 		}
-		result[percentage_key] = imageCaptchaInfo.CaptchaName
+		result[percentage_key] = sb
 	}
 	return nil
 }
@@ -158,12 +158,15 @@ func (self *SimpleImageCaptchaValidator) DoValidClickCaptcha(imageCaptchaTrack *
 		return false, errors.Wrap(err, "")
 	}
 	splitArr := strings.Split(*validStr, ";")
+	if splitArr != nil && splitArr[len(splitArr)-1] == "" {
+		splitArr = splitArr[:len(splitArr)-1]
+	}
 	trackList := imageCaptchaTrack.TrackList
 	// 取出点击事件的轨迹数据
-	var clickTrackList []*model.Track
+	var clickTrackList []model.Track
 	for _, track := range trackList {
 		if strings.EqualFold(common.TRACK_TYPE_CLICK, *track.Type) {
-			clickTrackList = append(clickTrackList, &track)
+			clickTrackList = append(clickTrackList, track)
 		}
 	}
 	if len(clickTrackList) != len(splitArr) {

@@ -92,6 +92,9 @@ type ValidParam struct {
 }
 
 ```
+# 默认的前端sdk项目地址为
+[https://gitee.com/tianai/tianai-captcha-web-sdk](https://gitee.com/tianai/tianai-captcha-web-sdk)
+
 
 # 扩展
 ## 验证码中设置自定义的背景图片和模板图片
@@ -174,4 +177,118 @@ func init() {
 	Captcha = builder.Build()
 }
 ```
-## 2. 验证码的校验信息默认存储在内存中，如果想换成redis之类的，自定义扩展即可，下面演示例子
+## 验证码的校验信息默认存储在内存中，如果想换成redis之类的，自定义扩展即可，下面演示例子
+```go
+package controller
+
+import (
+	"github.com/tianaiyouqing/tianai-captcha-go/application"
+	"github.com/tianaiyouqing/tianai-captcha-go/common/model"
+)
+
+var Captcha *application.TianAiCaptchaApplication
+
+func init() {
+	// 自定义缓存存储器
+	customCacheStore := &CustomCacheStore{}
+
+	builder := application.NewBuilder()
+	// 设置自定义缓存存储器
+	builder.SetCacheStore(customCacheStore)
+	// 添加验证码生成器
+	builder.AddProvider(application.CreateSliderProvider())
+	builder.AddProvider(application.CreateRotateProvider())
+	builder.AddProvider(application.CreateWordClickProvider(nil))
+	Captcha = builder.Build()
+}
+
+type CustomCacheStore struct{}
+
+func (CustomCacheStore) GetCache(key string) (value map[string]any, ok bool) {
+	//TODO 通过key获取缓存
+	panic("implement me")
+}
+
+func (CustomCacheStore) GetAndRemoveCache(key string) (value map[string]any, ok bool) {
+	//TODO 通过key获取缓存并删除
+	panic("implement me")
+}
+
+func (CustomCacheStore) SetCache(key string, data map[string]any, captchaInfo *model.ImageCaptchaInfo) error {
+	//TODO 设置缓存
+	panic("implement me")
+}
+```
+## 设置自定义图片转换器
+```go
+package controller
+
+import (
+	"github.com/tianaiyouqing/tianai-captcha-go/application"
+	"github.com/tianaiyouqing/tianai-captcha-go/common/model"
+	"github.com/tianaiyouqing/tianai-captcha-go/generator"
+)
+
+var Captcha *application.TianAiCaptchaApplication
+
+func init() {
+	// 自定义缓存存储器
+
+	
+	builder := application.NewBuilder()
+	// 设置自定义图片转换器， 默认是base64格式的转换前， 背景图为 jpg， 模板图为png， 如有需要可自定义实现 `generator.ImageTransform` 接口进行转换
+	builder.SetImageTransform(generator.NewBase64ImageTransform())
+	// 添加验证码生成器
+	builder.AddProvider(application.CreateSliderProvider())
+	builder.AddProvider(application.CreateRotateProvider())
+	builder.AddProvider(application.CreateWordClickProvider(nil))
+	Captcha = builder.Build()
+}
+```
+## 其它扩展
+```go
+package controller
+
+import (
+	"github.com/tianaiyouqing/tianai-captcha-go/application"
+	"github.com/tianaiyouqing/tianai-captcha-go/common/model"
+	"github.com/tianaiyouqing/tianai-captcha-go/generator"
+	"github.com/tianaiyouqing/tianai-captcha-go/resource"
+	"github.com/tianaiyouqing/tianai-captcha-go/validator"
+	"time"
+)
+
+var Captcha *application.TianAiCaptchaApplication
+
+func init() {
+	builder := application.NewBuilder()
+
+	// 设置资源存储器
+	builder.SetResourceStore(resource.NewMemoryImageCaptchaResourceStore())
+	// 设置资源读取器，负责把Resource对象转换成Image图片对象
+	readers := resource.NewDefaultImageCaptchaResourceReaders()
+	//readers.AddResourceReader(nil)// 自定义可以添加自定义的资源读取器
+	builder.SetResourceImageReader(readers)
+	// 设置自定义图片转换器， 默认是base64格式的转换前， 背景图为 jpg， 模板图为png， 如有需要可自定义实现 `generator.ImageTransform` 接口进行转换
+	builder.SetImageTransform(generator.NewBase64ImageTransform())
+	// 设置缓冲存储器， 默认是内存存储器， 如需要扩展redis之类， 可自定义实现 `application.CacheStore` 接口
+	builder.SetCacheStore(application.NewMemoryCacheStore(5*time.Minute, 5*time.Minute))
+	// 设置验证码验证器 参数为默认的容错值，传nil则容错值默认设置为 0.02
+	builder.SetImageCaptchaValidator(validator.NewSimpleImageCaptchaValidator(nil))
+
+	// 添加验证码生成器
+	builder.AddProvider(application.CreateSliderProvider())
+	builder.AddProvider(application.CreateRotateProvider())
+	builder.AddProvider(application.CreateWordClickProvider(nil))
+	Captcha = builder.Build()
+}
+```
+
+# tianai-captcha java版地址为
+[https://gitee.com/dromara/tianai-captcha](https://gitee.com/dromara/tianai-captcha)
+
+# qq群: 1021884609
+# 微信群:
+![](https://minio.tianai.cloud/public/qun2.jpg?t=20230825)
+
+## 微信群加不上的话 加微信好友 微信号: youseeseeyou-1ttd 拉你入群

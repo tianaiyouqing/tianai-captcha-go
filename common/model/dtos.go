@@ -90,7 +90,7 @@ type ClickImageCheckDefinition struct {
 }
 
 type ImageCaptchaVO struct {
-	CaptchaType           string `json:"type"`
+	CaptchaName           string `json:"type,name"`
 	BackgroundImage       string `json:"backgroundImage"`
 	TemplateImage         string `json:"templateImage"`
 	BackgroundImageTag    string `json:"backgroundImageTag"`

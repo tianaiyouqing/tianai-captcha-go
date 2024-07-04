@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	default_tolerant float64 = 0.2
+	default_tolerant float64 = 0.02
 	tolerant_key             = "tolerant"
 	name_key                 = "name"
 	captcha_type_key         = "captcha_type"

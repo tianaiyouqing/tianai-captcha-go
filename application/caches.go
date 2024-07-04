@@ -7,8 +7,8 @@ import (
 )
 
 type CacheStore interface {
-	getCache(key string) (value map[string]any, ok bool)
-	getAndRemoveCache(key string) (value map[string]any, ok bool)
+	GetCache(key string) (value map[string]any, ok bool)
+	GetAndRemoveCache(key string) (value map[string]any, ok bool)
 	SetCache(key string, data map[string]any, captchaInfo *model.ImageCaptchaInfo) error
 }
 
@@ -23,7 +23,7 @@ func NewMemoryCacheStore(expired time.Duration, cleanUpInterval time.Duration) *
 	}
 }
 
-func (self *MemoryCacheStore) getCache(key string) (value map[string]any, ok bool) {
+func (self *MemoryCacheStore) GetCache(key string) (value map[string]any, ok bool) {
 	data, ok := self.cache.Get(key)
 	if ok {
 		return data.(map[string]any), ok
@@ -31,7 +31,7 @@ func (self *MemoryCacheStore) getCache(key string) (value map[string]any, ok boo
 	return nil, ok
 }
 
-func (self *MemoryCacheStore) getAndRemoveCache(key string) (value map[string]any, ok bool) {
+func (self *MemoryCacheStore) GetAndRemoveCache(key string) (value map[string]any, ok bool) {
 	data, ok := self.cache.Get(key)
 	if ok {
 		self.cache.Delete(key)

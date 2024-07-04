@@ -66,7 +66,7 @@ func (self *TianAiCaptchaApplication) GenerateCaptcha(param *model.GenerateParam
 }
 
 func (self *TianAiCaptchaApplication) Valid(id string, track *model.ImageCaptchaTrack) (*model.ApiResponse, error) {
-	validData, ok := self.CacheStore.getCache(id)
+	validData, ok := self.CacheStore.GetCache(id)
 	if !ok {
 		response := model.ApiResponse{}
 		return response.Expire(), nil

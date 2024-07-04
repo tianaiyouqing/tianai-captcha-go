@@ -32,12 +32,13 @@ var Captcha *application.TianAiCaptchaApplication
 
 func init() {
     builder := application.NewBuilder()
-	// 添加滑块验证码
+    // 添加滑块验证码
     builder.AddProvider(application.CreateSliderProvider())
-	// 添加旋转验证码
+    // 添加旋转验证码
     builder.AddProvider(application.CreateRotateProvider())
-	// 添加文字点选验证码， 参数为nil时会读取默认的字体，可以替换成自定义字体， 传入多个字体会随机选择
+    // 添加文字点选验证码， 参数为nil时会读取默认的字体，可以替换成自定义字体， 传入多个字体会随机选择
     builder.AddProvider(application.CreateWordClickProvider(nil))
+	// 注意 构建出来的 CaptchaApplication 是单例的，所以可以全局使用
     Captcha = builder.Build()
 }
 ```
@@ -58,7 +59,7 @@ func GenCaptcha(c *gin.Context) {
         })
         return
     }
-	// 这边返回的结构是为了适配 tianai-captcha-web-sdk 前端项目
+    // 这边返回的结构是为了适配 tianai-captcha-web-sdk 前端项目
     c.JSON(200, gin.H{
         "code":    200,
         "msg":     "success",
@@ -71,7 +72,7 @@ func GenCaptcha(c *gin.Context) {
 // 校验验证码
 func Valid(c *gin.Context) {
 	
-	// 该接收的参数结构是前端项目 tianai-captcha-web-sdk 的 ValidParam
+    // 该接收的参数结构是前端项目 tianai-captcha-web-sdk 的 ValidParam
     validParam := new(ValidParam)
     if err := c.ShouldBindJSON(validParam); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

@@ -1,4 +1,4 @@
-package generator
+package test
 
 import (
 	"github.com/golang/freetype"

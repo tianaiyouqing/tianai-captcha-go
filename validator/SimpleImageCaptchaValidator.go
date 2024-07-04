@@ -149,9 +149,7 @@ func (self *SimpleImageCaptchaValidator) DoValidSliderCaptcha(imageCaptchaTrack 
 	lastTrack := imageCaptchaTrack.TrackList[len(imageCaptchaTrack.TrackList)-1]
 	calcPercentage := float64(*lastTrack.X) / float64(*imageCaptchaTrack.BgImageWidth)
 
-	maxTolerant := *oriPercentage + tolerant
-	minTolerant := *oriPercentage - tolerant
-	check := calcPercentage >= maxTolerant && calcPercentage <= minTolerant
+	check := checkPercentage(float32(calcPercentage), float32(*oriPercentage), float32(tolerant))
 	return check, nil
 }
 func (self *SimpleImageCaptchaValidator) DoValidClickCaptcha(imageCaptchaTrack *model.ImageCaptchaTrack, imageCaptchaValidData ValidData, tolerant float64) (bool, error) {

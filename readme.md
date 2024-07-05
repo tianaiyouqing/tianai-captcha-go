@@ -18,7 +18,7 @@
 # 快速开始
 ## 1. go mod 导入
 ```shell
-go get github.com/tianaiyouqing/tianai-captcha-go@v1.0.0
+go get github.com/tianaiyouqing/tianai-captcha-go@v1.0.1
 ```
 
 ## 2.初始化验证码

@@ -16,6 +16,7 @@
     - 文字点选验证码
     - 后面会陆续支持市面上更多好玩的验证码玩法... 敬请期待
 # 快速开始
+## 已经写好的demo例子参考 [https://gitee.com/tianai/captcha-go-demo](https://gitee.com/tianai/captcha-go-demo)
 ## 1. go mod 导入
 ```shell
 go get github.com/tianaiyouqing/tianai-captcha-go@v1.0.1

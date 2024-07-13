@@ -1,4 +1,4 @@
-## 可能是Golang开源界最好用的行为验证码工具
+## 基于golang实现的滑动/旋转/点选 验证码
 
 ---
 ## pc版在线体验 [在线体验](http://captcha.tianai.cloud)

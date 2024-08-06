@@ -1,28 +1,58 @@
-## 基于golang实现的滑动/旋转/点选 验证码
+<div align="center">
+
+![][image-logo]
+
+### tianaiCAPTCHA - 天爱验证码
+#### 基于 Golang 实现的滑动/旋转/点选 验证码  **[在线体验][online-demo-link]**
+<sup>可能是开源界最好用的行为验证码工具</sup><br>
+
+[![][github-release-shield]][github-release-link] [![][github-license-shield]][github-license-link]<br>
+
+</div>
 
 ---
-## pc版在线体验 [在线体验](http://captcha.tianai.cloud)
-## tianai-captcha java版地址 [https://gitee.com/dromara/tianai-captcha](https://gitee.com/dromara/tianai-captcha)
-![](https://minio.tianai.cloud/public/demo-view/go-slider-1.png)
-![](https://minio.tianai.cloud/public/demo-view/go-slider-2.png)
-![](https://minio.tianai.cloud/public/demo-view/go-rotate-1.png)
-![](https://minio.tianai.cloud/public/demo-view/go-rotate-2.png)
-![](https://minio.tianai.cloud/public/demo-view/go-click-1.png)
-![](https://minio.tianai.cloud/public/demo-view/go-click-2.png)
-## 简单介绍
-- tianai-captcha-go 目前支持的行为验证码类型
-    - 滑块验证码
-    - 旋转验证码
-    - 文字点选验证码
-    - 后面会陆续支持市面上更多好玩的验证码玩法... 敬请期待
+
+- **tianai CAPTCHA Golang 版** 目前含有的的行为验证码类型
+<table>
+  <tr>
+    <th>滑块验证码</th>
+    <th>旋转验证码</th>
+    <th>文字点选验证码</th>
+  </tr>
+  <tr>
+    <td><img src="https://minio.tianai.cloud/public/demo-view/go-slider-1.png" alt="滑块验证码"></td>
+    <td><img src="https://minio.tianai.cloud/public/demo-view/go-rotate-1.png" alt="旋转验证码"></td>
+    <td><img src="https://minio.tianai.cloud/public/demo-view/go-click-1.png" alt="文字点选验证码"></td>
+  </tr>
+  <tr>
+    <td colspan="3" align="center"><a href="http://captcha.tianai.cloud">在线体验 🚀</a></td>
+  </tr>
+</table>
+
+> 更多验证码类型待开发，敬请期待! ✨
+
+> [!NOTE]
+> 功能更丰富的 Java 版：[github.com/dromara/tianai-captcha][tianai-captcha-java-link]
+
 # 快速开始
-## 已经写好的demo例子参考 [https://gitee.com/tianai/captcha-go-demo](https://gitee.com/tianai/captcha-go-demo)
-## 1. go mod 导入
+
+> [!TIP]
+> Demo 参考 [gitee.com/tianai/captcha-go-demo][captcha-go-demo-link]
+
+## 1. mod 导入
 ```shell
 go get github.com/tianaiyouqing/tianai-captcha-go@v1.0.1
 ```
+> #### 需要本地开发，可拉取至项目根目录，并在 `go.mod` 添加
+> ```mod
+> replace github.com/tianaiyouqing/tianai-captcha-go => ./tianai-captcha-go
+> ```
 
-## 2.初始化验证码
+## 2. 初始化验证码
+
+<details>
+  <summary>展开</summary>
+
 ```go
 import (
 	"github.com/tianaiyouqing/tianai-captcha-go/application"
@@ -43,7 +73,13 @@ func init() {
     Captcha = builder.Build()
 }
 ```
-## 3.项目中使用验证码, 
+</details>
+
+## 3. 在项目中使用
+
+<details>
+  <summary>展开</summary>
+
 ```go
 // 这里以gin框架为例，其它框架自行修改即可
 
@@ -96,12 +132,20 @@ type ValidParam struct {
 }
 
 ```
-# 默认的前端sdk项目地址为
-[https://gitee.com/tianai/tianai-captcha-web-sdk](https://gitee.com/tianai/tianai-captcha-web-sdk)
+</details>
+
+---
+
+> [!NOTE]
+> 默认前端 SDK<br>
+> [github.com/tianaiyouqing/captcha-web-sdk][tianai-captcha-web-sdk-link]
 
 
-# 扩展
-## 验证码中设置自定义的背景图片和模板图片
+## 扩展
+
+<details>
+  <summary>自定义背景图片和模板图片</summary>
+
 ```go
 package controller
 
@@ -181,7 +225,13 @@ func init() {
 	Captcha = builder.Build()
 }
 ```
-## 验证码的校验信息默认存储在内存中，如果想换成redis之类的，自定义扩展即可，下面演示例子
+</details>
+
+<details>
+  <summary>验证码校验信息的存储位置</summary>
+
+#### 验证码的校验信息默认存储在内存中，若要换成 Redis 之类的，自定义扩展即可，例子：
+
 ```go
 package controller
 
@@ -223,7 +273,11 @@ func (CustomCacheStore) SetCache(key string, data map[string]any, captchaInfo *m
 	panic("implement me")
 }
 ```
-## 设置自定义图片转换器
+</details>
+
+<details>
+  <summary>自定义图片转换器</summary>
+
 ```go
 package controller
 
@@ -238,7 +292,7 @@ var Captcha *application.TianAiCaptchaApplication
 func init() {
 	// 自定义缓存存储器
 
-	
+
 	builder := application.NewBuilder()
 	// 设置自定义图片转换器， 默认是base64格式的转换前， 背景图为 jpg， 模板图为png， 如有需要可自定义实现 `generator.ImageTransform` 接口进行转换
 	builder.SetImageTransform(generator.NewBase64ImageTransform())
@@ -249,7 +303,11 @@ func init() {
 	Captcha = builder.Build()
 }
 ```
-## 其它扩展
+</details>
+
+<details>
+  <summary>其他</summary>
+
 ```go
 package controller
 
@@ -287,12 +345,42 @@ func init() {
 	Captcha = builder.Build()
 }
 ```
+</details>
 
-# tianai-captcha java版地址为
-[https://gitee.com/dromara/tianai-captcha](https://gitee.com/dromara/tianai-captcha)
+---
 
-# qq群: 1021884609
-# 微信群:
-![](https://minio.tianai.cloud/public/qun2.jpg?t=20230825)
+> [!TIP]
+> ### 👋 加入我们，与其他爱好者交流学习
+>
+> QQ群：`1021884609`<br>
+>
+> 微信群：群满，可扫码添加好友拉入群聊，或搜索微信号: `youseeseeyou-1ttd` 备注 `验证码`
+>
+> ![][qrcode-link] <br>
 
-## 微信群加不上的话 加微信好友 微信号: youseeseeyou-1ttd 拉你入群
+---
+
+## 贡献者
+
+<a href="https://github.com/tianaiyouqing/tianai-captcha-go/graphs/contributors" target="_blank">
+  <table>
+    <tr>
+      <th>
+          <img src="https://contrib.rocks/image?repo=tianaiyouqing/tianai-captcha-go">
+      </th>
+    </tr>
+  </table>
+</a>
+
+---
+
+[image-logo]: https://minio.tianai.cloud/public/captcha/logo/logo-519x100.png
+[github-release-shield]: https://img.shields.io/github/v/release/tianaiyouqing/tianai-captcha-go?color=369eff&labelColor=black&logo=github&style=flat-square
+[github-release-link]: https://github.com/tianaiyouqing/tianai-captcha-go/releases
+[github-license-link]: https://github.com/tianaiyouqing/tianai-captcha-go/blob/master/LICENSE
+[github-license-shield]: https://img.shields.io/badge/MulanPSL-2.0-white?labelColor=black&style=flat-square
+[tianai-captcha-java-link]: https://github.com/dromara/tianai-captcha
+[captcha-go-demo-link]: https://gitee.com/tianai/captcha-go-demo
+[tianai-captcha-web-sdk-link]: https://github.com/tianaiyouqing/captcha-web-sdk
+[online-demo-link]: http://captcha.tianai.cloud
+[qrcode-link]: https://minio.tianai.cloud/public/qun4.png
